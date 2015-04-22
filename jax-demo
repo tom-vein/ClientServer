@@ -1,0 +1,104 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package webservicewg;
+
+import java.util.HashSet;
+import java.util.Set;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jettison.json.JSONException;
+import webservicewg.model.Item;
+
+/**
+ *
+ * @author Thomas
+ */
+@Path( "message" )
+public class MessageResource
+{
+  @GET
+  @Produces( MediaType.APPLICATION_JSON )
+  //@Produces( MediaType.TEXT_XML )
+  // @Produces( { MediaType.TEXT_XML, MediaType.APPLICATION_JSON } )
+  public ServerInfo message()
+  {
+    
+    ServerInfo inf = new ServerInfo();
+    inf.setUsername(System.getProperty( "os.name" )+" "+System.getProperty( "os.version" ));
+     inf.setPassword("test");
+     
+     inf.getItems().add(new Item());
+    return inf;
+  }
+  
+  @GET
+  @Path ("login/{user}")
+  @Consumes (MediaType.TEXT_PLAIN)
+  @Produces( MediaType.APPLICATION_JSON )
+  //@Produces( MediaType.TEXT_XML )
+  // @Produces( { MediaType.TEXT_XML, MediaType.APPLICATION_JSON } )
+  public ServerInfo login(@PathParam("user") String user)
+  {
+    
+    ServerInfo inf = new ServerInfo();
+    inf.setUsername(user + " "+System.getProperty( "os.version" ));
+     inf.setPassword("test");
+     
+     inf.getItems().add(new Item());
+    return inf;
+  }
+  
+  @POST
+  @Path(value = "/ids")
+  public String ids(@HeaderParam("id") final String id) throws JSONException {
+      return "all ids";
+  }
+}
+
+@XmlRootElement
+class ServerInfo
+{
+   private String username;
+   private String password;
+   private Set<Item> items = new HashSet<Item>(0);
+
+  public ServerInfo() {
+    Item item = new Item();
+    item.setName("test");
+    items.add(item);
+    Item item2 = new Item();
+    item2.setItemid(2);
+    items.add(item2);
+  }
+   
+   
+
+  public Set<Item> getItems() {
+    return items;
+  }
+
+  public void setItems(Set<Item> items) {
+    this.items = items;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+   
+   
+}
